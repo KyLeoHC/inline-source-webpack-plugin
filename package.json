@@ -1,5 +1,5 @@
 {
-  "name": "inline-resource-webpack-plugin",
+  "name": "inline-source-webpack-plugin",
   "version": "0.0.1",
   "description": "A plugin for webpack4.x",
   "main": "index.js",
@@ -8,24 +8,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KyLeoHC/inline-resource-webpack-plugin.git"
+    "url": "git+https://github.com/KyLeoHC/inline-source-webpack-plugin.git"
   },
   "keywords": [
     "webpack",
     "inline",
-    "resource",
     "source",
-    "html",
     "css",
-    "js"
+    "js",
+    "plugin"
   ],
   "author": "KyLeo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/KyLeoHC/inline-resource-webpack-plugin/issues"
+    "url": "https://github.com/KyLeoHC/inline-source-webpack-plugin/issues"
   },
-  "homepage": "https://github.com/KyLeoHC/inline-resource-webpack-plugin#readme",
-  "devDependencies": {},
+  "homepage": "https://github.com/KyLeoHC/inline-source-webpack-plugin#readme",
   "dependencies": {
     "inline-source": "^6.1.5"
   }
