@@ -1,4 +1,4 @@
-<a href="https://www.npmjs.com/package/inline-source-webpack-plugin"><img src="https://img.shields.io/npm/v/inline-source-webpack-plugin.svg" alt="Version"></a>
+<a href="https://www.npmjs.com/package/inline-source-webpack-plugin"><img src="https://img.shields.io/npm/v/inline-source-webpack-plugin.svg" alt="npm Version"></a>
 
 # inline-source-webpack-plugin
 A webpack plugin to embed css/js resource in the html with inline-source module(webpack 4.x and HtmlWebpackPlugin is needed).
