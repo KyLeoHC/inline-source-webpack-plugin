@@ -1,2 +1,2 @@
-# inline-resource-webpack-plugin
+# inline-source-webpack-plugin
 A plugin for webpack4.x
