@@ -39,6 +39,7 @@ class InlineSourceWebpackPlugin {
                                 cb(null, data);
                             })
                             .catch(error => {
+                                cb(null, data);
                                 compilation.errors.push(error);
                             });
                     }
