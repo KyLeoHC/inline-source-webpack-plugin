@@ -1,7 +1,7 @@
 {
   "name": "inline-source-webpack-plugin",
   "version": "0.1.1",
-  "description": "A plugin for webpack4.x",
+  "description": "A inline-source plugin for webpack",
   "main": "index.js",
   "scripts": {},
   "repository": {
@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/KyLeoHC/inline-source-webpack-plugin#readme",
   "dependencies": {
-    "inline-source": "^6.1.5"
+    "inline-source": "^6.1.6"
   }
 }
