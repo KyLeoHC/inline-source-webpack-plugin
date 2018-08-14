@@ -31,7 +31,8 @@ class InlineSourceWebpackPlugin {
                 if (compilation.fileDependencies.add) {
                     compilation.fileDependencies.add(source.filepath);
                 } else {
-                    // Before Webpack 4 - fileDepenencies was an array
+                    // Before Webpack 4
+                    // fileDepenencies was an array
                     compilation.fileDependencies.push(source.filepath);
                 }
             }
@@ -53,7 +54,7 @@ class InlineSourceWebpackPlugin {
 
     apply(compiler) {
         if ('hooks' in compiler) {
-            // We're in webpack 4+ or higher
+            // webpack 4 or higher
             compiler.hooks.compilation.tap(this.constructor.name, compilation => {
                 // if htmlWebpackPlugin is not exist, just do nothing
                 if (compilation.hooks.htmlWebpackPluginAfterHtmlProcessing) {
@@ -66,7 +67,7 @@ class InlineSourceWebpackPlugin {
                 }
             });
         } else {
-            // We're in webpack 2 or 3.
+            // webpack 2 or 3
             compiler.plugin('compilation', compilation => {
                 compilation.plugin('html-webpack-plugin-after-html-processing', (data, cb) => {
                     this._process(compilation, data, cb);
