@@ -25,6 +25,9 @@ class InlineSourceWebpackPlugin {
                         break;
                     }
                 }
+                if (!source.content) {
+                    compilation.errors.push(new Error(`[${this.constructor.name}]:no asset match '${bundle}'.`));
+                }
             }
             if (source.filepath) {
                 // watch inline target
