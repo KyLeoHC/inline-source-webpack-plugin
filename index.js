@@ -2,6 +2,7 @@ const {inlineSource} = require('inline-source');
 
 class InlineSourceWebpackPlugin {
     constructor(options = {}) {
+        this.deleteBundles = [];
         this.options = Object.assign({
             compress: false
         }, options);
@@ -22,6 +23,10 @@ class InlineSourceWebpackPlugin {
                 for (let name in compilation.assets) {
                     if (name.indexOf(bundle) > -1) {
                         source.content = compilation.assets[name].source();
+                        if (source.props['bundle-delete']) {
+                            // mark the bundle that need to delete
+                            this.deleteBundles.push(name);
+                        }
                         break;
                     }
                 }
@@ -55,19 +60,36 @@ class InlineSourceWebpackPlugin {
             });
     }
 
+    /**
+     * delete target bundle
+     * @param compilation
+     * @private
+     */
+    _deleteBundle(compilation) {
+        if (this.deleteBundles.length) {
+            this.deleteBundles.forEach(bundle => delete compilation.assets[bundle]);
+        }
+        this.deleteBundles = [];
+    }
+
     apply(compiler) {
         if ('hooks' in compiler) {
+            const name = this.constructor.name;
             // webpack 4 or higher
-            compiler.hooks.compilation.tap(this.constructor.name, compilation => {
+            compiler.hooks.compilation.tap(name, compilation => {
                 // if htmlWebpackPlugin is not exist, just do nothing
                 if (compilation.hooks.htmlWebpackPluginAfterHtmlProcessing) {
                     compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync(
-                        this.constructor.name,
+                        name,
                         (data, cb) => {
                             this._process(compilation, data, cb);
                         }
                     );
                 }
+            });
+            compiler.hooks.emit.tapAsync(name, (compilation, callback) => {
+                this._deleteBundle(compilation);
+                callback && callback();
             });
         } else {
             // webpack 2 or 3
@@ -75,6 +97,10 @@ class InlineSourceWebpackPlugin {
                 compilation.plugin('html-webpack-plugin-after-html-processing', (data, cb) => {
                     this._process(compilation, data, cb);
                 });
+            });
+            compiler.plugin('emit', (compilation, callback) => {
+                this._deleteBundle(compilation);
+                callback && callback();
             });
         }
     }
