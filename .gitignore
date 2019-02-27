@@ -1,4 +1,4 @@
 .idea
 node_modules
 demo/node_modules
-demo/dist/*
+demo/dist
