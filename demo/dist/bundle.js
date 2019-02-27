@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["bundle"],[,function(i,e){console.log("This file is build by webpack.But InlineSourceWebpackPlugin will embed it into html file.")}],[[1,"runtime"]]]);
