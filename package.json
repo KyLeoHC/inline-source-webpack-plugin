@@ -3,6 +3,9 @@
   "version": "1.0.2",
   "description": "A inline-source plugin for webpack",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {},
   "repository": {
     "type": "git",
