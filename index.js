@@ -20,8 +20,9 @@ class InlineSourceWebpackPlugin {
     options.handlers = (source, context) => {
       const bundle = source.props.bundle;
       if (bundle) {
+        const regExp = new RegExp(bundle);
         for (let name in compilation.assets) {
-          if (name.indexOf(bundle) > -1) {
+          if (regExp.test(name)) {
             source.content = compilation.assets[name].source();
             if (source.props['bundle-delete']) {
               // mark the bundle that need to delete
