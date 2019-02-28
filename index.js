@@ -1,3 +1,4 @@
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { inlineSource } = require('inline-source');
 const { getTagRegExp } = require('inline-source/lib/utils');
 const htmlparser = require('htmlparser2');
@@ -107,19 +108,32 @@ class InlineSourceWebpackPlugin {
 
   apply(compiler) {
     if ('hooks' in compiler) {
-      const name = this.constructor.name;
       // webpack 4 or higher
-      compiler.hooks.compilation.tap(name, compilation => {
-        // if htmlWebpackPlugin is not exist, just do nothing
-        if (compilation.hooks.htmlWebpackPluginAfterHtmlProcessing) {
-          compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync(
-            name,
+      const name = this.constructor.name;
+      if (HtmlWebpackPlugin.version >= 4) {
+        // HtmlWebpackPlugin 4 or higher
+        compiler.hooks.compilation.tap(name, compilation => {
+          HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
+            name, // Set a meaningful name here for stack traces
             (data, cb) => {
               this._process(compilation, data, cb);
             }
           );
-        }
-      });
+        });
+      } else {
+        // HtmlWebpackPlugin 3 or lower
+        compiler.hooks.compilation.tap(name, compilation => {
+          // if htmlWebpackPlugin is not exist, just do nothing
+          if (compilation.hooks.htmlWebpackPluginAfterHtmlProcessing) {
+            compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync(
+              name,
+              (data, cb) => {
+                this._process(compilation, data, cb);
+              }
+            );
+          }
+        });
+      }
       compiler.hooks.emit.tapAsync(name, (compilation, callback) => {
         this._deleteAsset(compilation);
         callback && callback();

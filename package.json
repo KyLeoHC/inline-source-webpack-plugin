@@ -24,5 +24,10 @@
   "homepage": "https://github.com/KyLeoHC/inline-source-webpack-plugin#readme",
   "dependencies": {
     "inline-source": "^6.1.9"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^4.0.0-beta.5",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3"
   }
 }
