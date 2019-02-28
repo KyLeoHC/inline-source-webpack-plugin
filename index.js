@@ -1,8 +1,10 @@
 const { inlineSource } = require('inline-source');
+const { getTagRegExp } = require('inline-source/lib/utils');
+const htmlparser = require('htmlparser2');
 
 class InlineSourceWebpackPlugin {
   constructor(options = {}) {
-    this.deleteBundles = [];
+    this.deleteAssets = [];
     this.options = Object.assign({
       compress: false
     }, options);
@@ -26,13 +28,16 @@ class InlineSourceWebpackPlugin {
             source.content = compilation.assets[name].source();
             if (source.props['bundle-delete']) {
               // mark the bundle that need to delete
-              this.deleteBundles.push(name);
+              this.deleteAssets.push({
+                name,
+                regExp
+              });
             }
             break;
           }
         }
         if (!source.content) {
-          compilation.errors.push(new Error(`[${this.constructor.name}]:no asset match '${bundle}'.`));
+          compilation.errors.push(new Error(`[${this.constructor.name}]: no assets match '${bundle}'.`));
         }
       }
       if (source.filepath) {
@@ -52,7 +57,7 @@ class InlineSourceWebpackPlugin {
     };
     inlineSource(data.html, options)
       .then(html => {
-        data.html = html;
+        data.html = this._deleteTag(html);
         cb(null, data);
       })
       .catch(error => {
@@ -62,15 +67,41 @@ class InlineSourceWebpackPlugin {
   }
 
   /**
-   * delete target bundle
+   * delete the tag of inline file
+   * @param html
+   * @returns {*}
+   * @private
+   */
+  _deleteTag(html) {
+    let needDelete = false;
+    const tagRegExp = getTagRegExp(false);
+    const parser = new htmlparser.Parser(
+      new htmlparser.DomHandler((error, dom) => {
+        if (error) throw error;
+        const attributes = dom[0].attribs;
+        const url = attributes.href || attributes.src;
+        needDelete = this.deleteAssets.some(bundle => {
+          return bundle.regExp.test(url);
+        });
+      })
+    );
+
+    return html.replace(tagRegExp, match => {
+      parser.parseComplete(match);
+      return needDelete ? '' : match;
+    });
+  }
+
+  /**
+   * delete target asset
    * @param compilation
    * @private
    */
-  _deleteBundle(compilation) {
-    if (this.deleteBundles.length) {
-      this.deleteBundles.forEach(bundle => delete compilation.assets[bundle]);
+  _deleteAsset(compilation) {
+    if (this.deleteAssets.length) {
+      this.deleteAssets.forEach(bundle => delete compilation.assets[bundle.name]);
     }
-    this.deleteBundles = [];
+    this.deleteAssets = [];
   }
 
   apply(compiler) {
@@ -89,7 +120,7 @@ class InlineSourceWebpackPlugin {
         }
       });
       compiler.hooks.emit.tapAsync(name, (compilation, callback) => {
-        this._deleteBundle(compilation);
+        this._deleteAsset(compilation);
         callback && callback();
       });
     } else {
@@ -100,7 +131,7 @@ class InlineSourceWebpackPlugin {
         });
       });
       compiler.plugin('emit', (compilation, callback) => {
-        this._deleteBundle(compilation);
+        this._deleteAsset(compilation);
         callback && callback();
       });
     }
