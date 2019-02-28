@@ -31,7 +31,7 @@ class InlineSourceWebpackPlugin {
               source.tag = 'style';
             }
             if (source.props['bundle-delete']) {
-              // mark the bundle that need to delete
+              // mark the asset that need to delete
               this.deleteAssets.push({
                 name,
                 regExp
