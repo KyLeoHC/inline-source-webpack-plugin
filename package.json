@@ -23,6 +23,6 @@
   },
   "homepage": "https://github.com/KyLeoHC/inline-source-webpack-plugin#readme",
   "dependencies": {
-    "inline-source": "^6.1.6"
+    "inline-source": "^6.1.9"
   }
 }

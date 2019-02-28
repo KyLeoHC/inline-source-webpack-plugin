@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([["index"],[function(n,o){console.log("This is InlineSourceWebpackPlugin demo.")}],[[0,"runtime"]]]);
