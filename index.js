@@ -26,6 +26,10 @@ class InlineSourceWebpackPlugin {
         for (let name in compilation.assets) {
           if (regExp.test(name)) {
             source.content = compilation.assets[name].source();
+            if (source.type === 'css') {
+              // change tag type
+              source.tag = 'style';
+            }
             if (source.props['bundle-delete']) {
               // mark the bundle that need to delete
               this.deleteAssets.push({
