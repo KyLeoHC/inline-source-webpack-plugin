@@ -19,11 +19,14 @@ class InlineSourceWebpackPlugin {
    * @private
    */
   _process(compilation, data, cb) {
-    const options = Object.assign({}, this.options);
+    const options = Object.assign({
+      noAssetMatch: 1,
+      noAssetMatchReplace: `<!-- -->`
+    }, this.options);
     options.handlers = (source, context) => {
-      const bundle = source.props.bundle;
-      if (bundle) {
-        const regExp = new RegExp(bundle);
+      const asset = source.props.asset;
+      if (asset) {
+        const regExp = new RegExp(asset);
         for (let name in compilation.assets) {
           if (regExp.test(name)) {
             source.content = compilation.assets[name].source();
@@ -31,7 +34,7 @@ class InlineSourceWebpackPlugin {
               // change tag type
               source.tag = 'style';
             }
-            if (source.props['bundle-delete']) {
+            if (source.props['asset-delete']) {
               // mark the asset that need to delete
               this.deleteAssets.push({
                 name,
@@ -41,9 +44,24 @@ class InlineSourceWebpackPlugin {
             break;
           }
         }
+        if (!source.content) {
+          const noAssetMatchError = new Error(`[${this.constructor.name}]: no assets match '${asset}'.`);
+          switch (options.noAssetMatch) {
+            case 0:
+              break;
+            case 1:
+              compilation.warnings.push(noAssetMatchError);
+              source.replace = options.noAssetMatchReplace;
+              break;
+            case 2:
+              compilation.errors.push(noAssetMatchError);
+              source.replace = options.noAssetMatchReplace;
+              break;
+          }
+        }
       }
       if (source.filepath) {
-        // watch inline target
+        // watch inline file
         if (compilation.fileDependencies.add) {
           compilation.fileDependencies.add(source.filepath);
         } else {
@@ -82,8 +100,8 @@ class InlineSourceWebpackPlugin {
         if (error) throw error;
         const attributes = dom[0].attribs;
         const url = attributes.href || attributes.src;
-        needDelete = this.deleteAssets.some(bundle => {
-          return bundle.regExp.test(url);
+        needDelete = this.deleteAssets.some(asset => {
+          return asset.regExp.test(url);
         });
       })
     );
@@ -101,7 +119,7 @@ class InlineSourceWebpackPlugin {
    */
   _deleteAsset(compilation) {
     if (this.deleteAssets.length) {
-      this.deleteAssets.forEach(bundle => delete compilation.assets[bundle.name]);
+      this.deleteAssets.forEach(asset => delete compilation.assets[asset.name]);
     }
     this.deleteAssets = [];
   }
