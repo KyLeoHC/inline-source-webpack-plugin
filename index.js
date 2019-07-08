@@ -23,7 +23,7 @@ class InlineSourceWebpackPlugin {
       noAssetMatch: 1,
       noAssetMatchReplace: `<!-- -->`
     }, this.options);
-    options.handlers = (source, context) => {
+    const handlers = [(source) => {
       const asset = source.props.asset;
       if (asset) {
         const regExp = new RegExp(asset);
@@ -70,11 +70,13 @@ class InlineSourceWebpackPlugin {
           compilation.fileDependencies.push(source.filepath);
         }
       }
-      if (this.options.handlers) {
-        return this.options.handlers(source, context);
-      }
       return Promise.resolve();
-    };
+    }];
+    if (options.handlers && options.handlers.length) {
+      options.handlers = handlers.concat(options.handlers);
+    } else {
+      options.handlers = handlers;
+    }
     inlineSource(data.html, options)
       .then(html => {
         data.html = this._deleteTag(html);
