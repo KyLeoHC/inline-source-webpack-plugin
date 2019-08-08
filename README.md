@@ -1,5 +1,4 @@
 <a href="https://www.npmjs.com/package/inline-source-webpack-plugin"><img src="https://img.shields.io/npm/v/inline-source-webpack-plugin.svg" alt="npm Version"></a>
-
 [![Build Status](https://travis-ci.org/KyLeoHC/inline-source-webpack-plugin.svg?branch=master)](https://travis-ci.org/KyLeoHC/inline-source-webpack-plugin)
 
 # inline-source-webpack-plugin
