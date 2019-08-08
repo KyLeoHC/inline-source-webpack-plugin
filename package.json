@@ -46,13 +46,15 @@
     "testMatch": [
       "**/test/**/*.spec.js"
     ],
+    "collectCoverage": true,
     "coverageDirectory": "<rootDir>/coverage",
     "coveragePathIgnorePatterns": [
       "<rootDir>/test",
       "<rootDir>/node_modules"
     ],
     "coverageReporters": [
-      "json"
+      "json",
+      "text"
     ]
   }
 }
