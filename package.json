@@ -6,7 +6,9 @@
   "files": [
     "index.js"
   ],
-  "scripts": {},
+  "scripts": {
+    "test": "jest --runInBand"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KyLeoHC/inline-source-webpack-plugin.git"
@@ -30,7 +32,27 @@
   },
   "devDependencies": {
     "html-webpack-plugin": "^4.0.0-beta.5",
+    "jest": "^24.8.0",
+    "rimraf": "^2.6.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"
+  },
+  "engines": {
+    "node": ">=8.3.0"
+  },
+  "jest": {
+    "verbose": true,
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/test/**/*.spec.js"
+    ],
+    "coverageDirectory": "<rootDir>/coverage",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/test",
+      "<rootDir>/node_modules"
+    ],
+    "coverageReporters": [
+      "json"
+    ]
   }
 }
