@@ -182,7 +182,7 @@ describe('InlineSourceWebpackPlugin', () => {
           compress: true,
           rootpath: './test/fixtures',
           noAssetMatch: 2,
-          noAssetMatchReplace: '<!--inline-source-webpack-plugin-->'
+          noAssetMatchReplace: '<!--inline-source-webpack-plugin1-->'
         })
       ]
     });
