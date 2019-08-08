@@ -124,7 +124,7 @@ describe('InlineSourceWebpackPlugin', () => {
       plugins: [
         new HtmlWebpackPlugin({
           filename: defaultTemplateFilename,
-          template: path.join(__dirname, `fixtures/fileNotFound.html`),
+          template: path.join(__dirname, `fixtures/assetNotFound.html`),
           inject: 'body',
           chunks: ['runtime', 'index']
         }),
@@ -148,7 +148,7 @@ describe('InlineSourceWebpackPlugin', () => {
       plugins: [
         new HtmlWebpackPlugin({
           filename: defaultTemplateFilename,
-          template: path.join(__dirname, `fixtures/fileNotFound.html`),
+          template: path.join(__dirname, `fixtures/assetNotFound.html`),
           inject: 'body',
           chunks: ['runtime', 'index']
         }),
@@ -174,7 +174,7 @@ describe('InlineSourceWebpackPlugin', () => {
       plugins: [
         new HtmlWebpackPlugin({
           filename: defaultTemplateFilename,
-          template: path.join(__dirname, `fixtures/fileNotFound.html`),
+          template: path.join(__dirname, `fixtures/assetNotFound.html`),
           inject: 'body',
           chunks: ['runtime', 'index']
         }),
