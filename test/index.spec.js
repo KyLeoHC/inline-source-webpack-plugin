@@ -119,7 +119,8 @@ describe('InlineSourceWebpackPlugin', () => {
     });
   });
 
-  test('should ignore while "noAssetMatch" option is set to "0"', done => {
+
+  test('should ignore while "noAssetMatch" option is set to "0" or "none"', done => {
     const webpackConfig = Object.assign({}, baseWebpackConfig, {
       plugins: [
         new HtmlWebpackPlugin({
@@ -131,7 +132,7 @@ describe('InlineSourceWebpackPlugin', () => {
         new InlineSourceWebpackPlugin({
           compress: true,
           rootpath: './test/fixtures',
-          noAssetMatch: 0
+          noAssetMatch: 'none'
         })
       ]
     });
@@ -143,7 +144,7 @@ describe('InlineSourceWebpackPlugin', () => {
     });
   });
 
-  test('should throw warnings and replace target while "noAssetMatch" option is set to "1"', done => {
+  test('should throw warnings and replace target while "noAssetMatch" option is set to "1" or "warn"', done => {
     const webpackConfig = Object.assign({}, baseWebpackConfig, {
       plugins: [
         new HtmlWebpackPlugin({
@@ -155,7 +156,7 @@ describe('InlineSourceWebpackPlugin', () => {
         new InlineSourceWebpackPlugin({
           compress: true,
           rootpath: './test/fixtures',
-          noAssetMatch: 1,
+          noAssetMatch: 'warn',
           noAssetMatchReplace: '<!--inline-source-webpack-plugin-->'
         })
       ]
@@ -169,7 +170,7 @@ describe('InlineSourceWebpackPlugin', () => {
     });
   });
 
-  test('should throw error and replace target while "noAssetMatch" option is set to "2"', done => {
+  test('should throw error and replace target while "noAssetMatch" option is set to "2" or "error"', done => {
     const webpackConfig = Object.assign({}, baseWebpackConfig, {
       plugins: [
         new HtmlWebpackPlugin({
@@ -181,7 +182,7 @@ describe('InlineSourceWebpackPlugin', () => {
         new InlineSourceWebpackPlugin({
           compress: true,
           rootpath: './test/fixtures',
-          noAssetMatch: 2,
+          noAssetMatch: 'error',
           noAssetMatchReplace: '<!--inline-source-webpack-plugin-->'
         })
       ]

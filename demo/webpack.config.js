@@ -26,7 +26,7 @@ module.exports = {
     new InlineSourceWebpackPlugin({
       compress: true,
       rootpath: './src',
-      noAssetMatch: 1
+      noAssetMatch: 'warn'
     })
   ],
   mode: 'production'

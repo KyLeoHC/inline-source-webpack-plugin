@@ -20,7 +20,7 @@ class InlineSourceWebpackPlugin {
    */
   _process(compilation, data, cb) {
     const options = Object.assign({
-      noAssetMatch: 1,
+      noAssetMatch: 'warn',
       noAssetMatchReplace: `<!-- -->`
     }, this.options);
     const handlers = [(source) => {
@@ -48,12 +48,15 @@ class InlineSourceWebpackPlugin {
           const noAssetMatchError = new Error(`[${this.constructor.name}]: no assets match '${asset}'.`);
           switch (options.noAssetMatch) {
             case 0:
+            case 'none':
               break;
             case 1:
+            case 'warn':
               compilation.warnings.push(noAssetMatchError);
               source.replace = options.noAssetMatchReplace;
               break;
             case 2:
+            case 'error':
               compilation.errors.push(noAssetMatchError);
               source.replace = options.noAssetMatchReplace;
               break;
