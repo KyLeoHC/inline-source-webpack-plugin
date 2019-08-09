@@ -55,10 +55,10 @@ Available options include(refer to [this](https://github.com/popeindustries/inli
 - `compress`: enable/disable compression.(default `false`)
 - `rootpath`: path used for resolving inlineable paths.
 - `noAssetMatchReplace`: work with `noAssetMatch` option.(default `<!-- -->`)
-- `noAssetMatch`: define the behaviour while no asset match the value of `inline-asset` attribute.(default `1`)
-  - `0`: do nothing and the tag is still reserved in the html.
-  - `1`: throw warning tips and replace the tag with the content of `noAssetMatchReplace` option.
-  - `2`: throw error tips and replace the tag with the content of `noAssetMatchReplace` option(This level will affect the compilation of webpack).
+- `noAssetMatch`: define the behaviour while no asset match the value of `inline-asset` attribute.(default `none`)
+  - `none`: do nothing and the tag is still reserved in the html.
+  - `warn`: throw warning tips and replace the tag with the content of `noAssetMatchReplace` option.
+  - `error`: throw error tips and replace the tag with the content of `noAssetMatchReplace` option(This level will affect the compilation of webpack).
 
 ```javascript
 // webpack.config.js
@@ -73,7 +73,8 @@ module.exports = {
     }),
     new InlineSourceWebpackPlugin({
       compress: true,
-      rootpath: './src'
+      rootpath: './src',
+      noAssetMatch: 'warn'
     })
   ]
 };
@@ -87,7 +88,7 @@ Add `inline-asset-delete` attribute for deleting the asset after inline task.
 ```
 
 The value of `inline-asset` attribute is a *regular expression*.
-  
+
 Note: For `inline-asset` feature, you may notice the 'no asset match' warning or error in developement mode as you write the regular expression for the production mode.Just ignore the 'no asset match' warning or error while in developement mode.Or you can provide `noAssetMatch` option for ignoring the warning or error;
 
 ## License
