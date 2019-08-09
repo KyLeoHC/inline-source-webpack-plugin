@@ -5,5 +5,7 @@ node_js:
   - "12"
 install:
   - npm install -g codecov
-after_success:
+  - npm install
+script:
+  - npm run test
   - codecov
