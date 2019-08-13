@@ -28,10 +28,10 @@
   },
   "homepage": "https://github.com/KyLeoHC/inline-source-webpack-plugin#readme",
   "dependencies": {
-    "inline-source": "^7.0.0"
+    "inline-source": "^7.1.0"
   },
   "devDependencies": {
-    "html-webpack-plugin": "^4.0.0-beta.5",
+    "html-webpack-plugin": "^4.0.0-beta.8",
     "jest": "^24.8.0",
     "rimraf": "^2.6.3",
     "webpack": "^4.39.1",
