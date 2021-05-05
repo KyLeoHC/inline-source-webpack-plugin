@@ -41,11 +41,8 @@ You can find this demo in the demo directory and view the output:
 # install dependency
 npm i
 
-# enter the demo directory
-cd demo
-
-# build
-npm run build
+# build demo
+npm run build:demo
 ```
 
 ## Usage
