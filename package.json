@@ -1,6 +1,6 @@
 {
   "name": "inline-source-webpack-plugin",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "A inline-source plugin for webpack",
   "main": "index.js",
   "files": [
