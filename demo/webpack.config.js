@@ -4,8 +4,8 @@ const InlineSourceWebpackPlugin = require('../index');
 
 module.exports = {
   entry: {
-    index: './src/index',
-    bundle: './src/bundle'
+    index: './demo/src/index.js',
+    bundle: './demo/src/bundle.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -13,19 +13,18 @@ module.exports = {
     filename: '[name].[contenthash].js'
   },
   optimization: {
-    namedChunks: true,
     runtimeChunk: 'single'
   },
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './src/index.html',
+      template: './demo/src/index.html',
       inject: 'body',
       chunks: ['runtime', 'index']
     }),
     new InlineSourceWebpackPlugin({
       compress: true,
-      rootpath: './src',
+      rootpath: './demo/src',
       noAssetMatch: 'warn'
     })
   ],
