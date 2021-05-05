@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { inlineSource } = require('inline-source');
 const { getTagRegExp } = require('inline-source/lib/utils');
 const htmlparser = require('htmlparser2');
+const { Compilation } = require('webpack');
 
 class InlineSourceWebpackPlugin {
   constructor(options = {}) {
@@ -69,7 +70,7 @@ class InlineSourceWebpackPlugin {
           compilation.fileDependencies.add(source.filepath);
         } else {
           // Before Webpack 4
-          // fileDepenencies was an array
+          // fileDependencies was an array
           compilation.fileDependencies.push(source.filepath);
         }
       }
@@ -124,7 +125,13 @@ class InlineSourceWebpackPlugin {
    */
   _deleteAsset(compilation) {
     if (this.deleteAssets.length) {
-      this.deleteAssets.forEach(asset => delete compilation.assets[asset.name]);
+      if ('deleteAsset' in compilation) {
+        this.deleteAssets.forEach(asset => {
+          compilation.deleteAsset(asset.name);
+        });
+      } else {
+        this.deleteAssets.forEach(asset => delete compilation.assets[asset.name]);
+      }
     }
     this.deleteAssets = [];
   }
@@ -157,10 +164,19 @@ class InlineSourceWebpackPlugin {
           }
         });
       }
-      compiler.hooks.emit.tapAsync(name, (compilation, callback) => {
-        this._deleteAsset(compilation);
-        callback && callback();
-      });
+      if (Compilation && Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE) {
+        compiler.hooks.thisCompilation.tap(name, compilation => {
+          compilation.hooks.processAssets.tap(
+            { name, stage: Compilation.PROCESS_ASSETS_STAGE_SUMMARIZE },
+            () => { this._deleteAsset(compilation); }
+          );
+        });
+      } else {
+        compiler.hooks.emit.tapAsync(name, (compilation, callback) => {
+          this._deleteAsset(compilation);
+          callback && callback();
+        });
+      }
     } else {
       // webpack 2 or 3
       compiler.plugin('compilation', compilation => {

@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const rimraf = require('rimraf');
 const webpack = require('webpack');
@@ -17,7 +18,6 @@ const baseWebpackConfig = {
     filename: '[name].[contenthash].js'
   },
   optimization: {
-    namedChunks: true,
     runtimeChunk: 'single'
   },
   mode: 'production'
@@ -79,16 +79,10 @@ function testInlineSourceWebpackPlugin(
       ).toBeTruthy();
     }
     if (expectResults && expectResults.length) {
-      const content = stats.compilation.assets[outputFile].source();
-      expect(
-        expectResults.every(result => {
-          if (result instanceof RegExp) {
-            return result.test(content);
-          } else {
-            return content.indexOf(result) > -1;
-          }
-        })
-      ).toBeTruthy();
+      const content = fs.readFileSync(path.join(__dirname, `../dist/${outputFile}`)).toString();
+      expectResults.forEach(result => {
+        expect(content).toMatch(result);
+      });
     }
     done();
   });
@@ -110,11 +104,11 @@ describe('InlineSourceWebpackPlugin', () => {
         // inline.js
         `<script>function Person(){}Person.prototype.sayHello=function(){console.log("[inline]:","hello world!")},(new Person).sayHello();</script>`,
         // webpack runtime file
-        `window.webpackJsonp=window.webpackJsonp||[]`,
+        `webpack`,
         // bundle.js
         `console.log("This file is build by webpack.But InlineSourceWebpackPlugin will embed it into html file.")`,
         // appended by html-webpack-plugin
-        /<script src="\/inline-source-webpack-plugin\/dist\/index\.\w+\.js"><\/script>/
+        /<script (?:defer="defer" )?src="\/inline-source-webpack-plugin\/dist\/index\.\w+\.js"><\/script>/
       ]
     });
   });
@@ -190,8 +184,6 @@ describe('InlineSourceWebpackPlugin', () => {
     testInlineSourceWebpackPlugin({
       webpackConfig,
       done,
-      expectOutputFiles: [/index\.html$/, /index\.\w+\.js$/, /runtime\.\w+\.js$/, /bundle\.\w+\.js$/],
-      expectResults: ['<!--inline-source-webpack-plugin-->'],
       hasErrors: true
     });
   });
