@@ -1,8 +1,32 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { inlineSource } = require('inline-source');
-const { getTagRegExp } = require('inline-source/lib/utils');
 const htmlparser = require('htmlparser2');
 const { Compilation } = require('webpack');
+
+/**
+ * Retrieve tag regexp for 'attribute'
+ *
+ * @param { string } attribute
+ * @returns { RegExp }
+ */
+function getTagRegExp(attribute) {
+  if (attribute) {
+    // <([a-zA-Z]+)\b[^>]*?\s(?:inline [^>]*?|inline|inline=([\'\"]).*?\2[^>]*?)>(?:<\/\1\s?>)?
+    return new RegExp(
+      '<([a-zA-Z]+)\\b[^>]*?\\s(?:' +
+        attribute +
+        '\\b[^>]*?|' +
+        attribute +
+        '|' +
+        attribute +
+        '=([\\\'\\"])(?:true|' +
+        attribute +
+        ')\\2[^>]*?)>(?:<\\/\\1\\s?>)?',
+      'gm'
+    );
+  }
+  return /<(script|link|img|object)\s?[^>]*?>(?:<\/\1\s?>)?/gm;
+}
 
 class InlineSourceWebpackPlugin {
   constructor(options = {}) {

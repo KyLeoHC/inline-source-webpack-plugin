@@ -28,18 +28,19 @@
     "url": "https://github.com/KyLeoHC/inline-source-webpack-plugin/issues"
   },
   "homepage": "https://github.com/KyLeoHC/inline-source-webpack-plugin#readme",
-  "dependencies": {
-    "inline-source": "github:KyLeoHC/inline-source#feat-update-deps"
-  },
   "devDependencies": {
     "html-webpack-plugin": "^5.3.1",
-    "jest": "^24.8.0",
+    "jest": "^29.2.1",
     "rimraf": "^2.6.3",
     "webpack": "^5.36.2",
     "webpack-cli": "^4.6.0"
   },
+  "dependencies": {
+    "htmlparser2": "^8.0.1",
+    "inline-source": "^8.0.2"
+  },
   "engines": {
-    "node": ">=10.13.0"
+    "node": ">=16.0.0"
   },
   "jest": {
     "verbose": true,
